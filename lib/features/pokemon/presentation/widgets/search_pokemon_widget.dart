@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../core/connection/network_info.dart';
 import '../../../../../core/constants/constants.dart';
+import '../../../pokemon_image/presentation/providers/pokemon_image_provider.dart';
 import '../providers/pokemon_provider.dart';
 import '../providers/selected_pokemon_item_provider.dart';
 import 'custom_elevated_button_widget.dart';
@@ -111,9 +112,13 @@ class SearchPokemonWidget extends StatelessWidget {
             textColor: Colors.white,
             iconColor: Colors.white,
             callback: () async {
+              PokemonImageProvider pokemonImageProvider =
+                  Provider.of<PokemonImageProvider>(context, listen: false);
+
               Provider.of<PokemonProvider>(context, listen: false)
                   .eitherFailureOrPokemon(
                 value: (selectedPokemonItem.number + 1).toString(),
+                pokemonImageProvider: pokemonImageProvider,
               );
               if (await NetworkInfoImpl(DataConnectionChecker()).isConnected ==
                   false) {

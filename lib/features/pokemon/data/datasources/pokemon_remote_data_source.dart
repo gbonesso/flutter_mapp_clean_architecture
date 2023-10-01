@@ -13,12 +13,13 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
 
   PokemonRemoteDataSourceImpl({required this.dio});
 
+  // dio gets the information from API
   @override
   Future<PokemonModel> getPokemon({required PokemonParams params}) async {
     final response = await dio.get(
       'https://pokeapi.co/api/v2/pokemon/${params.id}',
       queryParameters: {
-        'api_key': 'if you need',
+        'api_key': 'if you need', // When is it needed?
       },
     );
 

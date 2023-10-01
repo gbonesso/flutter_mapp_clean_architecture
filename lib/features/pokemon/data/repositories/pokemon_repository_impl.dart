@@ -9,6 +9,8 @@ import '../datasources/pokemon_local_data_source.dart';
 import '../datasources/pokemon_remote_data_source.dart';
 import '../models/pokemon_model.dart';
 
+// This is the bridge between the business layer and the data layer.
+// this is where the "magic" happens
 class PokemonRepositoryImpl implements PokemonRepository {
   final PokemonRemoteDataSource remoteDataSource;
 
@@ -22,18 +24,19 @@ class PokemonRepositoryImpl implements PokemonRepository {
     required this.networkInfo,
   });
 
+  // Either is implemented in the dartz package
   @override
   Future<Either<Failure, PokemonModel>> getPokemon(
       {required PokemonParams params}) async {
     if (await networkInfo.isConnected!) {
       try {
-        final remotePokemon =
-            await remoteDataSource.getPokemon(params: params);
+        final remotePokemon = await remoteDataSource.getPokemon(params: params);
 
         localDataSource.cachePokemon(remotePokemon);
-
+        // Return the Right side of the Either (PokemonModel)
         return Right(remotePokemon);
       } on ServerException {
+        // Return the left side of the Either (Failure)
         return Left(ServerFailure(errorMessage: 'This is a server exception'));
       }
     } else {
